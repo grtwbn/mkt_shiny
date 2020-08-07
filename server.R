@@ -52,22 +52,6 @@ function(input,output){
     #     datatable(t10, rownames=FALSE) 
     # })
     
-    #spx_divi
-    output$dygraph2 = renderDygraph({
-        xts(div_yield[, -1], as.Date(div_yield[, 1], format = '%m/%d/%Y')) %>%
-            dygraph(main = 'S&P 500 Dividend Yield',
-                    ylab = 'Yield (%)') %>%
-            dyAxis('x', drawGrid = TRUE) %>%
-            dySeries('V1', label = 'Yield') %>%
-            dyAxis('y', valueRange = c('0', '15')) %>% 
-            dyRangeSelector(height = 20) %>%
-            dyOptions(colors = brewer.pal(n = 8, name = "Dark2"))
-    })
-    
-    output$table2 = DT::renderDataTable({
-        datatable(div_yield, rownames=FALSE) 
-    })
-    
     # #shiller
     # output$dygraph4 = renderDygraph({
     #     xts(shiller_yld10[, -1], as.Date(shiller_yld10[, 1], format = '%m/%d/%Y')) %>%
@@ -142,31 +126,188 @@ function(input,output){
     })
     
     #exposures
-    output$dygraph5b = renderDygraph({
+    output$dygraph5a = renderDygraph({
         xts(exposures[, -1], as.Date(exposures[, 1], format = '%m/%d/%Y')) %>%
-            dygraph(main = 'Inverse Relationship between Market Returns and Market Exposure') %>%
+            dygraph(main = 'Inverse Relationship: Market Returns and Investor Market Exposure') %>%
+            dyShading(from = '1953-7-1', to = '1954-5-1', color = '#DEBDBD') %>%
+            dyShading(from = '1957-8-1', to = '1958-4-1', color = '#DEBDBD') %>%
+            dyShading(from = '1960-4-1', to = '1961-2-1', color = '#DEBDBD') %>%
+            dyShading(from = '1969-12-1', to = '1970-11-1', color = '#DEBDBD') %>%
+            dyShading(from = '1973-11-1', to = '1975-3-1', color = '#DEBDBD') %>%
+            dyShading(from = '1980-1-1', to = '1980-7-1', color = '#DEBDBD') %>%
+            dyShading(from = '1981-7-1', to = '1982-11-1', color = '#DEBDBD') %>%
+            dyShading(from = '1990-7-1', to = '1991-3-1', color = '#DEBDBD') %>%
+            dyShading(from = '2001-3-1', to = '2001-11-1', color = '#DEBDBD') %>%
+            dyShading(from = '2007-12-1', to = '2009-06-1', color = '#DEBDBD') %>%
+            dyShading(from = '2020-2-1', to = '2020-07-31', color = '#DEBDBD') %>%
             dyHighlight(highlightSeriesOpts = list(strokeWidth = 2)) %>%
             dyAxis('x', drawGrid = TRUE) %>%
-            dyAxis('y',
-                   label = 'INVERTED: S&P500 10 Year Annualized Total Return (%)', 
-                   valueRange = c('20', '-5'), 
-                   independentTicks = TRUE,
-                   drawGrid = TRUE) %>% 
-            dySeries('TR10A',
-                     axis = ('y'),
-                     label = 'INVERTED: S&P 10Yr Anualized Tot Ret.') %>%
-            dyAxis('y2',
-                   label = 'Market Expsoure (%)', 
-                   valueRange = c('21.5', '52.5'),
-                   independentTicks = TRUE,
-                   drawGrid = FALSE) %>%
-            dySeries('EXP', axis = ('y2'), label = 'Market Expsoure') %>%
+            dySeries('TR10A', label = 'S&P 10Y Annualized TR (%)') %>%
+            dySeries('EXP', label = 'Market Exposure (%)') %>%
             dyRangeSelector(height = 20) %>%
             dyOptions(colors = brewer.pal(n = 8, name = "Dark2"))
     })
     
     output$table5 = DT::renderDataTable({
         datatable(exposures, rownames=FALSE) 
+    })
+    
+    output$dygraph5b = renderDygraph({
+        xts(exposures[, -1], as.Date(exposures[, 1], format = '%m/%d/%Y')) %>%
+            dygraph(main = 'Inverse Relationship: Market Returns (INVERTED AXIS) and Investor Market Exposure') %>%
+            dyHighlight(highlightSeriesOpts = list(strokeWidth = 2)) %>%
+            dyShading(from = '1953-7-1', to = '1954-5-1', color = '#DEBDBD') %>%
+            dyShading(from = '1957-8-1', to = '1958-4-1', color = '#DEBDBD') %>%
+            dyShading(from = '1960-4-1', to = '1961-2-1', color = '#DEBDBD') %>%
+            dyShading(from = '1969-12-1', to = '1970-11-1', color = '#DEBDBD') %>%
+            dyShading(from = '1973-11-1', to = '1975-3-1', color = '#DEBDBD') %>%
+            dyShading(from = '1980-1-1', to = '1980-7-1', color = '#DEBDBD') %>%
+            dyShading(from = '1981-7-1', to = '1982-11-1', color = '#DEBDBD') %>%
+            dyShading(from = '1990-7-1', to = '1991-3-1', color = '#DEBDBD') %>%
+            dyShading(from = '2001-3-1', to = '2001-11-1', color = '#DEBDBD') %>%
+            dyShading(from = '2007-12-1', to = '2009-06-1', color = '#DEBDBD') %>%
+            dyShading(from = '2020-2-1', to = '2020-07-31', color = '#DEBDBD') %>%
+            dyAxis('x', drawGrid = TRUE) %>%
+            dyAxis('y',
+                   label = 'INVERTED AXIS: S&P 10Y Annualized TR (%)', 
+                   valueRange = c('20', '-5'), 
+                   independentTicks = TRUE,
+                   drawGrid = TRUE) %>% 
+            dySeries('TR10A',
+                     axis = ('y'),
+                     label = 'INVERT: S&P 10Y Annualized TR .') %>%
+            dyAxis('y2',
+                   label = 'Market Expsoure (%)', 
+                   valueRange = c('21.5', '52.5'),
+                   independentTicks = TRUE,
+                   drawGrid = FALSE) %>%
+            dySeries('EXP', axis = ('y2'), label = 'Market Expsoure (%)') %>%
+            dyRangeSelector(height = 20) %>%
+            dyOptions(colors = brewer.pal(n = 8, name = "Dark2"))
+    })
+    
+    output$table5 = DT::renderDataTable({
+        datatable(exposures, rownames=FALSE) 
+    })
+    
+    # spx total return and price return
+    output$dygraph6 = renderDygraph({
+            xts(spx_price_tr[, -1], as.Date(spx_price_tr[, 1], format = '%m/%d/%Y')) %>%
+            dygraph(main = 'Inverse Relationship: Market Returns and Investor Market Exposure') %>%
+            dyShading(from = '1937-5-1', to = '1938-6-1', color = '#DEBDBD') %>%
+            dyShading(from = '1945-2-1', to = '1945-10-1', color = '#DEBDBD') %>%
+            dyShading(from = '1948-11-1', to = '1949-10-1', color = '#DEBDBD') %>%
+            dyShading(from = '1953-7-1', to = '1954-5-1', color = '#DEBDBD') %>%
+            dyShading(from = '1957-8-1', to = '1958-4-1', color = '#DEBDBD') %>%
+            dyShading(from = '1960-4-1', to = '1961-2-1', color = '#DEBDBD') %>%
+            dyShading(from = '1969-12-1', to = '1970-11-1', color = '#DEBDBD') %>%
+            dyShading(from = '1973-11-1', to = '1975-3-1', color = '#DEBDBD') %>%
+            dyShading(from = '1980-1-1', to = '1980-7-1', color = '#DEBDBD') %>%
+            dyShading(from = '1981-7-1', to = '1982-11-1', color = '#DEBDBD') %>%
+            dyShading(from = '1990-7-1', to = '1991-3-1', color = '#DEBDBD') %>%
+            dyShading(from = '2001-3-1', to = '2001-11-1', color = '#DEBDBD') %>%
+            dyShading(from = '2007-12-1', to = '2009-06-1', color = '#DEBDBD') %>%
+            dyShading(from = '2020-2-1', to = '2020-07-31', color = '#DEBDBD') %>%
+            dyHighlight(highlightSeriesOpts = list(strokeWidth = 2)) %>%
+            dyAxis('x', drawGrid = TRUE) %>%
+            dySeries('PRICE', label = 'S&P 500 Price Index') %>%
+            dySeries('TR', label = 'S&P 500 Total Return Index') %>%
+            dyRangeSelector(height = 20) %>%
+            dyOptions(colors = brewer.pal(n = 8, name = "Dark2"), logscale = TRUE)
+    })
+    
+    output$table6 = DT::renderDataTable({
+        datatable(spx_price_tr, rownames=FALSE) 
+    })
+    
+    # spx_eyld
+    output$dygraph7 = renderDygraph({
+        xts(sp_eyld[, -1], as.Date(sp_eyld[, 1], format = '%m/%d/%Y')) %>%
+            dygraph(main = 'S&P 500 Earnings Yield',
+                    ylab = 'Yield (%)') %>%
+            dyShading(from = '1882-3-1', to = '1885-5-1', color = '#DEBDBD') %>%
+            dyShading(from = '1887-3-1', to = '1888-4-1', color = '#DEBDBD') %>%
+            dyShading(from = '1890-7-1', to = '1891-5-1', color = '#DEBDBD') %>%
+            dyShading(from = '1893-1-1', to = '1894-6-1', color = '#DEBDBD') %>%
+            dyShading(from = '1895-12-1', to = '1897-6-1', color = '#DEBDBD') %>%
+            dyShading(from = '1899-6-1', to = '1900-12-1', color = '#DEBDBD') %>%
+            dyShading(from = '1902-9-1', to = '1904-8-1', color = '#DEBDBD') %>%
+            dyShading(from = '1907-5-1', to = '1908-6-1', color = '#DEBDBD') %>%
+            dyShading(from = '1910-1-1', to = '1912-1-1', color = '#DEBDBD') %>%
+            dyShading(from = '1913-1-1', to = '1914-12-1', color = '#DEBDBD') %>%
+            dyShading(from = '1918-8-1', to = '1919-3-1', color = '#DEBDBD') %>%
+            dyShading(from = '1920-1-1', to = '1921-7-1', color = '#DEBDBD') %>%
+            dyShading(from = '1923-5-1', to = '1924-6-1', color = '#DEBDBD') %>%
+            dyShading(from = '1926-10-1', to = '1927-11-1', color = '#DEBDBD') %>%
+            dyShading(from = '1929-8-1', to = '1933-3-1', color = '#DEBDBD') %>%
+            dyShading(from = '1937-5-1', to = '1938-6-1', color = '#DEBDBD') %>%
+            dyShading(from = '1945-2-1', to = '1945-10-1', color = '#DEBDBD') %>%
+            dyShading(from = '1948-11-1', to = '1949-10-1', color = '#DEBDBD') %>%
+            dyShading(from = '1953-7-1', to = '1954-5-1', color = '#DEBDBD') %>%
+            dyShading(from = '1957-8-1', to = '1958-4-1', color = '#DEBDBD') %>%
+            dyShading(from = '1960-4-1', to = '1961-2-1', color = '#DEBDBD') %>%
+            dyShading(from = '1969-12-1', to = '1970-11-1', color = '#DEBDBD') %>%
+            dyShading(from = '1973-11-1', to = '1975-3-1', color = '#DEBDBD') %>%
+            dyShading(from = '1980-1-1', to = '1980-7-1', color = '#DEBDBD') %>%
+            dyShading(from = '1981-7-1', to = '1982-11-1', color = '#DEBDBD') %>%
+            dyShading(from = '1990-7-1', to = '1991-3-1', color = '#DEBDBD') %>%
+            dyShading(from = '2001-3-1', to = '2001-11-1', color = '#DEBDBD') %>%
+            dyShading(from = '2007-12-1', to = '2009-06-1', color = '#DEBDBD') %>%
+            dyShading(from = '2020-2-1', to = '2020-07-31', color = '#DEBDBD') %>%
+            dyAxis('x', drawGrid = TRUE) %>%
+            dySeries('V1', label = 'Yield') %>%
+            dyAxis('y', valueRange = c('0', '20')) %>% 
+            dyRangeSelector(height = 20) %>%
+            dyOptions(colors = brewer.pal(n = 8, name = "Dark2"))
+    })
+    
+    output$table7 = DT::renderDataTable({
+        datatable(sp_eyld, rownames=FALSE) 
+    })
+    
+    # spx_divi
+    output$dygraph2 = renderDygraph({
+        xts(div_yield[, -1], as.Date(div_yield[, 1], format = '%m/%d/%Y')) %>%
+            dygraph(main = 'S&P 500 Dividend Yield',
+                    ylab = 'Yield (%)') %>%
+            dyShading(from = '1882-3-1', to = '1885-5-1', color = '#DEBDBD') %>%
+            dyShading(from = '1887-3-1', to = '1888-4-1', color = '#DEBDBD') %>%
+            dyShading(from = '1890-7-1', to = '1891-5-1', color = '#DEBDBD') %>%
+            dyShading(from = '1893-1-1', to = '1894-6-1', color = '#DEBDBD') %>%
+            dyShading(from = '1895-12-1', to = '1897-6-1', color = '#DEBDBD') %>%
+            dyShading(from = '1899-6-1', to = '1900-12-1', color = '#DEBDBD') %>%
+            dyShading(from = '1902-9-1', to = '1904-8-1', color = '#DEBDBD') %>%
+            dyShading(from = '1907-5-1', to = '1908-6-1', color = '#DEBDBD') %>%
+            dyShading(from = '1910-1-1', to = '1912-1-1', color = '#DEBDBD') %>%
+            dyShading(from = '1913-1-1', to = '1914-12-1', color = '#DEBDBD') %>%
+            dyShading(from = '1918-8-1', to = '1919-3-1', color = '#DEBDBD') %>%
+            dyShading(from = '1920-1-1', to = '1921-7-1', color = '#DEBDBD') %>%
+            dyShading(from = '1923-5-1', to = '1924-6-1', color = '#DEBDBD') %>%
+            dyShading(from = '1926-10-1', to = '1927-11-1', color = '#DEBDBD') %>%
+            dyShading(from = '1929-8-1', to = '1933-3-1', color = '#DEBDBD') %>%
+            dyShading(from = '1937-5-1', to = '1938-6-1', color = '#DEBDBD') %>%
+            dyShading(from = '1945-2-1', to = '1945-10-1', color = '#DEBDBD') %>%
+            dyShading(from = '1948-11-1', to = '1949-10-1', color = '#DEBDBD') %>%
+            dyShading(from = '1953-7-1', to = '1954-5-1', color = '#DEBDBD') %>%
+            dyShading(from = '1957-8-1', to = '1958-4-1', color = '#DEBDBD') %>%
+            dyShading(from = '1960-4-1', to = '1961-2-1', color = '#DEBDBD') %>%
+            dyShading(from = '1969-12-1', to = '1970-11-1', color = '#DEBDBD') %>%
+            dyShading(from = '1973-11-1', to = '1975-3-1', color = '#DEBDBD') %>%
+            dyShading(from = '1980-1-1', to = '1980-7-1', color = '#DEBDBD') %>%
+            dyShading(from = '1981-7-1', to = '1982-11-1', color = '#DEBDBD') %>%
+            dyShading(from = '1990-7-1', to = '1991-3-1', color = '#DEBDBD') %>%
+            dyShading(from = '2001-3-1', to = '2001-11-1', color = '#DEBDBD') %>%
+            dyShading(from = '2007-12-1', to = '2009-06-1', color = '#DEBDBD') %>%
+            dyShading(from = '2020-2-1', to = '2020-07-31', color = '#DEBDBD') %>%
+            dyAxis('x', drawGrid = TRUE) %>%
+            dySeries('V1', label = 'Yield') %>%
+            dyAxis('y', valueRange = c('0', '15')) %>% 
+            dyRangeSelector(height = 20) %>%
+            dyOptions(colors = brewer.pal(n = 8, name = "Dark2"))
+    })
+    
+    output$table2 = DT::renderDataTable({
+        datatable(div_yield, rownames=FALSE) 
     })
     
 }

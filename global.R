@@ -13,9 +13,6 @@ t10y2y = read.csv('t10y2y.csv')
 # # 2. 10 year treasury 
 # t10 = read.csv('10_year_treasury_constant_maturity_dgs10.csv')
 
-# 2. S&P 500 dividend yield
-div_yield = read.csv('sp500_dividend_yield.csv')
-
 # 3. ERP
 erp = read.csv('erp.csv')
 
@@ -24,3 +21,12 @@ erp = read.csv('erp.csv')
 
 # 5a and 5b. Allocation-Based Returns
 exposures = read.csv('allocation-based_stock_market_returns.csv')
+
+# 6. S&P 500 Returns
+spx_price_tr = read.csv('spx_price_tr.csv')
+
+# 2. S&P 500 dividend yield
+div_yield = read.csv('sp500_dividend_yield.csv')
+
+# 7. S&P 500 earning yield
+sp_eyld = read.csv('sp500_eyld.csv')
